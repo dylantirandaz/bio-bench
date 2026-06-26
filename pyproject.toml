@@ -1,0 +1,9 @@
+[project]
+name = "biofigure-claimcheck"
+version = "0.1.0"
+description = "Schema and tooling for expert-verified biology figure claim verification evals."
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.biofigure]
+default_package = "BioFigure-ClaimCheck-300"

@@ -1,0 +1,46 @@
+# macOS/editor noise
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Documentation and non-code project artifacts
+README.md
+*.md
+docs/
+data/
+
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments and local package metadata
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases, logs, and scratch output
+*.sqlite
+*.sqlite3
+*.db
+*.log
+logs/
+tmp/
+temp/
+outputs/
+
+# Downloaded or private source artifacts are covered by data/.

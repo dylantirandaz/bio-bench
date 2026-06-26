@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/biofigure-task.schema.json",
+  "title": "BioFigure Claim Verification Task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "source",
+    "input",
+    "question",
+    "answer_choices",
+    "gold_answer",
+    "expert_rationale",
+    "failure_type",
+    "task_type",
+    "difficulty",
+    "ambiguity",
+    "review_status",
+    "safety_level",
+    "review_metadata"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^BFC-(FIXTURE-)?[0-9]{6}$"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "pmcid",
+        "doi",
+        "license",
+        "commercial_use_allowed",
+        "paper_title",
+        "authors",
+        "journal",
+        "publication_year",
+        "url",
+        "date_accessed"
+      ],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "pmcid": { "type": "string" },
+        "doi": { "type": "string" },
+        "license": {
+          "enum": [
+            "CC BY",
+            "CC BY-SA",
+            "CC BY-ND",
+            "CC BY-NC",
+            "CC BY-NC-SA",
+            "CC BY-NC-ND",
+            "CC0",
+            "Public Domain",
+            "Other",
+            "Unknown"
+          ]
+        },
+        "commercial_use_allowed": { "type": "boolean" },
+        "paper_title": { "type": "string", "minLength": 1 },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "journal": { "type": "string", "minLength": 1 },
+        "publication_year": {
+          "type": "integer",
+          "minimum": 1900
+        },
+        "url": { "type": "string", "minLength": 1 },
+        "date_accessed": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "figure_id",
+        "figure_panel",
+        "caption",
+        "relevant_excerpt",
+        "claim",
+        "evidence_assets"
+      ],
+      "properties": {
+        "figure_id": { "type": "string", "minLength": 1 },
+        "figure_panel": { "type": "string", "minLength": 1 },
+        "caption": { "type": "string", "minLength": 1 },
+        "relevant_excerpt": { "type": "string", "minLength": 1 },
+        "claim": { "type": "string", "minLength": 1 },
+        "evidence_assets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["asset_type", "uri", "sha256"],
+            "properties": {
+              "asset_type": {
+                "enum": [
+                  "figure_image",
+                  "panel_crop",
+                  "supplement",
+                  "source_pdf",
+                  "html_snapshot"
+                ]
+              },
+              "uri": { "type": "string", "minLength": 1 },
+              "sha256": {
+                "type": "string",
+                "pattern": "^([a-fA-F0-9]{64}|PENDING)$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "question": { "type": "string", "minLength": 1 },
+    "answer_choices": {
+      "const": [
+        "Supported",
+        "Contradicted",
+        "Overclaimed",
+        "Not verifiable from provided evidence"
+      ]
+    },
+    "gold_answer": {
+      "enum": [
+        "Supported",
+        "Contradicted",
+        "Overclaimed",
+        "Not verifiable from provided evidence"
+      ]
+    },
+    "expert_rationale": { "type": "string", "minLength": 1 },
+    "failure_type": {
+      "enum": [
+        "supported_claim",
+        "causality_overclaim",
+        "wrong_entity",
+        "missing_control",
+        "figure_misread",
+        "unsupported_mechanism",
+        "statistical_overclaim",
+        "assay_limitation",
+        "citation_hallucination",
+        "not_enough_evidence_failure",
+        "contradicted_by_evidence",
+        "ambiguous_evidence",
+        "other"
+      ]
+    },
+    "task_type": {
+      "enum": [
+        "claim_support",
+        "panel_identification",
+        "missing_control",
+        "causal_vs_correlational",
+        "entity_check",
+        "alternative_explanation",
+        "scientific_caution",
+        "limitation_identification",
+        "caption_contradiction",
+        "evidence_sufficiency"
+      ]
+    },
+    "difficulty": {
+      "enum": ["easy", "medium", "hard"]
+    },
+    "ambiguity": {
+      "enum": ["low", "medium", "high"]
+    },
+    "review_status": {
+      "enum": [
+        "draft",
+        "candidate_ai_generated",
+        "single_expert_reviewed",
+        "two_expert_reviewed",
+        "adjudicated",
+        "rejected",
+        "fixture_not_for_training"
+      ]
+    },
+    "safety_level": {
+      "enum": ["standard", "dual_use_review", "unsafe_reject"]
+    },
+    "review_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "created_by",
+        "created_at",
+        "reviewer_ids",
+        "adjudicator_id",
+        "review_notes"
+      ],
+      "properties": {
+        "created_by": { "type": "string", "minLength": 1 },
+        "created_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "reviewer_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "adjudicator_id": {
+          "type": ["string", "null"]
+        },
+        "review_notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
