@@ -1,0 +1,14 @@
+{
+  "causality_overclaim": {
+    "definition": "Fixture definition.",
+    "example": "Fixture example.",
+    "affected_modules": ["biofigure_claimcheck"],
+    "grading_penalty_recommendation": "Major."
+  },
+  "context_collapse": {
+    "definition": "Fixture definition.",
+    "example": "Fixture example.",
+    "affected_modules": ["literature_contradiction_synthesis"],
+    "grading_penalty_recommendation": "Major."
+  }
+}

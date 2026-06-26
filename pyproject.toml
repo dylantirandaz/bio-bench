@@ -1,9 +1,9 @@
 [project]
-name = "biofigure-claimcheck"
+name = "bioresearch-agent-bench"
 version = "0.1.0"
-description = "Schema and tooling for expert-verified biology figure claim verification evals."
+description = "Runnable harness for expert-reviewed biology research-agent benchmarks."
 requires-python = ">=3.9"
 dependencies = []
 
-[tool.biofigure]
-default_package = "BioFigure-ClaimCheck-300"
+[tool.brab]
+default_benchmark = "BioResearchAgentBench-v0"

@@ -1,0 +1,21 @@
+[
+  {
+    "source_id": "SRC-001",
+    "title": "Fixture source",
+    "authors": "Fixture Author",
+    "journal": "Fixture Journal",
+    "year": "2026",
+    "doi": "10.0000/fixture",
+    "pmid": "",
+    "pmcid": "",
+    "url": "https://example.org/fixture",
+    "license": "Fixture license",
+    "commercial_use_status": "allowed",
+    "date_accessed": "2026-06-26",
+    "source_type": "paper",
+    "domains": ["fixture"],
+    "figures_used": ["Figure 1"],
+    "datasets_used": [],
+    "validation_notes": "Fixture only."
+  }
+]
