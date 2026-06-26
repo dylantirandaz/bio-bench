@@ -1,4 +1,5 @@
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -6,6 +7,7 @@ from pathlib import Path
 from brab.baseline import write_baseline_outputs
 from brab.io import load_jsonl, write_jsonl
 from brab.prompts import export_prompt_pack
+from brab.run_command import run_command_on_prompts
 from brab.score import normalize_label, score_outputs
 from brab.validate import validate_task_pack
 
@@ -74,6 +76,30 @@ class BrabRunnerTests(unittest.TestCase):
             outputs = load_jsonl(out)
         self.assertEqual(total, 2)
         self.assertEqual(len(outputs), 2)
+
+    def test_run_command_adapter_writes_outputs(self) -> None:
+        adapter = (
+            "import json,sys; "
+            "p=json.loads(sys.stdin.read()); "
+            "print(json.dumps({'task_id': p['task_id'], 'label': 'Overclaimed', "
+            "'answer': 'Overclaimed', 'rationale': 'fixture'}))"
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            prompts = tmp / "prompts.jsonl"
+            outputs = tmp / "outputs.jsonl"
+            export_prompt_pack(FIXTURES / "brab_tasks.jsonl", prompts)
+            total = run_command_on_prompts(
+                prompts,
+                outputs,
+                model_name="fixture-command",
+                command=[sys.executable, "-c", adapter],
+                timeout_seconds=10,
+            )
+            records = load_jsonl(outputs)
+        self.assertEqual(total, 2)
+        self.assertEqual(records[0]["model_name"], "fixture-command")
+        self.assertEqual(records[0]["label"], "Overclaimed")
 
     def test_label_normalization(self) -> None:
         self.assertEqual(normalize_label("C. Overclaimed"), "overclaimed")

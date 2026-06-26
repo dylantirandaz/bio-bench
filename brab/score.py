@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Mapping
@@ -210,6 +211,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tasks", type=Path, required=True, help="Path to tasks.jsonl")
     parser.add_argument("--outputs", type=Path, required=True, help="Model outputs JSONL path")
     parser.add_argument("--out-dir", type=Path, required=True, help="Directory for scores/report/training data")
+    parser.add_argument(
+        "--target-max-accuracy",
+        type=float,
+        help="Optional hardness gate. Exit nonzero if auto label accuracy is greater than or equal to this value.",
+    )
     return parser
 
 
@@ -219,6 +225,12 @@ def main(argv: list[str] | None = None) -> int:
     accuracy = report["summary"]["label_accuracy"]
     print(f"Auto label accuracy: {accuracy:.1%}")
     print(f"Wrote scores/report/training data to {args.out_dir}")
+    if args.target_max_accuracy is not None and accuracy >= args.target_max_accuracy:
+        print(
+            f"FAILED hardness target: {accuracy:.1%} >= {args.target_max_accuracy:.1%}",
+            file=sys.stderr,
+        )
+        return 2
     return 0
 
 
